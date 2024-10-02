@@ -1,0 +1,11 @@
+boardSize ← 5 7  
+
+r ← (3 3 ⍴ ⍳ 9) ∊ 2 3 4 5 8
+
+boardSize ↑ r
+
+BoardR ← ¯1 ⊖ ¯2 ⌽ 5 7 ↑ r
+
+applyLifeRules ← {⊃1 ⍵ ∨∙∧ 3 4 = +/ +/ 1 0 ¯1 ∘∙⊖ 1 0 ¯1 ⌽¨ ⊂⍵}
+generation ← {(applyLifeRules⍣⍵)⍺}
+ BoardR ∘ generation¨ ⍳4
