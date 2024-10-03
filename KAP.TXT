@@ -1,5 +1,32 @@
+Updated Working Version:
+----------------------------------
+
+
 boardSize ← 15
 walker ← (3 3 ⍴ ⍳ 9) ∊ 1 2 3 4 8
 Board ← (boardSize÷2) ⌽ (boardSize÷2) ⊖ boardSize boardSize ↑ walker
 ∇ life {⊃1 ⍵ ∨∙∧ 3 4 = +/ +/ 1 0 ¯1 ⊖⌻ 1 0 ¯1 ⌽¨ ⊂⍵}
 Board (life Board) (life life Board)
+
+
+
+--------------------------------------------
+I spent a couple hours trying to get the colors to show up
+for the right cells. I tried a few different ways, but I ran into
+strange errors every time. Below is one of my nonfunctional versions;
+maybe you'll be able to see where I'm going wrong.
+---------------------------------------------
+
+boardSize ← 8
+walker ← (3 3 ⍴ ⍳ 9) ∊ 1 2 3 4 8
+Board ← (boardSize÷2) ⌽ (boardSize÷2) ⊖ boardSize boardSize ↑ walker
+∇ life {⊃1 ⍵ ∨∙∧ 3 4 = +/ +/ 1 0 ¯1 ⊖⌻ 1 0 ¯1 ⌽¨ ⊂⍵}
+
+colors ← 0 0.5 1 ⍝ 0 is white, 0.5 is grey, 1 is black
+
+∇ DrawBoard {⍺ gui:draw boardSize boardSize ⍴ colors[⍵]}
+
+∇ AnimateBoard {DrawBoard ⍺ ⍵ ⋄ AnimateBoard life ⍵}
+
+⍝Board (life Board) (life life Board)
+AnimateBoard boardSize Board
