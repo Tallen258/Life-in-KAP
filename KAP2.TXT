@@ -1,0 +1,18 @@
+KAP2.TXT
+
+
+boardSize ← 10
+walker ← (10 10 ⍴ ⍳ 100) ∊ 8 18 28 29 10 
+Board ← (boardSize÷2) ⌽ (boardSize÷2) ⊖ boardSize boardSize ↑ (walker)
+∇ life {⊃1 ⍵ ∨∙∧ 3 4 = +/ +/ 1 0 ¯1 ⊖⌻ 1 0 ¯1 ⌽¨ ⊂⍵}
+
+Board ( (gui:draw) life Board)( life life Board)(life life life Board)
+
+
+
+
+
+
+TODO: 
+- TeamNeighborCount: function to count neighbors for a given team. Pass in the team number and the board
+- CountNeighbors: calculates the sum of two calls to the
