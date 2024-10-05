@@ -1,0 +1,51 @@
+
+∇Join{⍕¯1↓,⍉2 ¯1⍴⍵,(⍴⍵)⍴⍕⍺}
+∇ToString{if ((typeof ⍵)=typeof "") {@[, (@, Join ToString¨ ⍵), @]} else { ⍕⍵}}
+∇AssertEquals{if (⍺≢⍵) {:failedAssertion throw ("Assertion Failed! expected: " (typeof ⍺) " '" (ToString ⍺) "' but was " (typeof ⍵) " '" (ToString ⍵) "'")}}
+
+boardSize ← 10
+walker1 ← (3 3 ⍴ ⍳ 9) ∊ 1 3 6 7 8 
+walker2 ←  (3 3 ⍴ ⍳ 9) ∊ 2 5
+⍝board1 ← ⊂(boardSize boardSize ↑ walker1) + (2 × (boardSize boardSize ↑ walker2))
+board1 ← ⊂boardSize boardSize ↑ (walker)
+
+⍝ board2 ← ⊂boardSize boardSize ↑ 5 ⌽ 5 ⊖ (walker2)
+∇ CountNeighbors { +/ +/ 1 0 ¯1 ⊖⌻ 1 0 ¯1 ⌽¨ ⍵}
+∇ team CountTeamNeighbors board{CountNeighbors team = board}
+
+∇ Survive {⍵ ∧ ∨/ 3 4 =¨ CountNeighbors ⍵}
+∇ ToBeBorn {⊂(~⊃⍵) ∧ 3 = ⊃CountNeighbors ⍵}
+
+∇ BirthCells board {
+team1Neighbors ← 1 CountTeamNeighbors board
+team2Neighbors ← 2 CountTeamNeighbors board
+totalNeighbors ← team1Neighbors + team2Neighbors
+
+born ← ⊂((~⊃board) ∧ ⊃(totalNeighbors = 3))
+teamBornAs ← 1 + (team1Neighbors > team2Neighbors)
+born × teamBornAs
+}
+
+∇ SurviveCells board {
+team1Neighbors ← 1 CountTeamNeighbors board
+team2Neighbors ← 2 CountTeamNeighbors board
+totalNeighbors ← team1Neighbors + team2Neighbors
+
+surviveTeam1 ← (board = 1)∧((totalNeighbors = 3) ∨ totalNeighbors = 4)
+surviveTeam2 ← (board = 2)∧((totalNeighbors = 3) ∨ totalNeighbors = 4)
+
+(surviveTeam1 × 1) + (surviveTeam2 × 2)
+}
+
+⍝BirthCells board1 
+
+⍝3 = countNeighbors Board1
+∇ LifeIteration board {(BirthCells board) + SurviveCells board}
+
+
+⍝SurviveCells board1
+⍝BirthCells board1
+
+LifeIteration board1
+
+⍝1 CountTeamNeighbors board1 ⍝ less than or equal to 
