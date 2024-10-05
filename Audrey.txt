@@ -4,10 +4,10 @@
 ∇AssertEquals{if (⍺≢⍵) {:failedAssertion throw ("Assertion Failed! expected: " (typeof ⍺) " '" (ToString ⍺) "' but was " (typeof ⍵) " '" (ToString ⍵) "'")}}
 
 boardSize ← 10
-walker1 ← (3 3 ⍴ ⍳ 9) ∊ 1 3 6 7 8 
-walker2 ←  (3 3 ⍴ ⍳ 9) ∊ 2 5
-⍝board1 ← ⊂(boardSize boardSize ↑ walker1) + (2 × (boardSize boardSize ↑ walker2))
-board1 ← ⊂boardSize boardSize ↑ (walker)
+walker1 ← (3 3 ⍴ ⍳ 9) ∊ 2 3 5 7 8 
+walker2 ←  (3 3 ⍴ ⍳ 9) ∊ 0 3 5 6 7
+board1 ← ⊂(boardSize boardSize ↑ walker1) + ((boardSize+3)⌽(2 × (boardSize boardSize ↑ walker2)))
+⍝board1 ← ⊂boardSize boardSize ↑ (walker1)
 
 ⍝ board2 ← ⊂boardSize boardSize ↑ 5 ⌽ 5 ⊖ (walker2)
 ∇ CountNeighbors { +/ +/ 1 0 ¯1 ⊖⌻ 1 0 ¯1 ⌽¨ ⍵}
@@ -46,6 +46,7 @@ surviveTeam2 ← (board = 2)∧((totalNeighbors = 3) ∨ totalNeighbors = 4)
 ⍝SurviveCells board1
 ⍝BirthCells board1
 
-LifeIteration board1
+⍝LifeIteration board1
+board1
 
 ⍝1 CountTeamNeighbors board1 ⍝ less than or equal to 
