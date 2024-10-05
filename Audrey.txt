@@ -6,7 +6,7 @@
 boardSize ← 10
 walker1 ← (3 3 ⍴ ⍳ 9) ∊ 2 3 5 7 8 
 walker2 ←  (3 3 ⍴ ⍳ 9) ∊ 0 3 5 6 7
-board1 ← ⊂(boardSize boardSize ↑ walker1) + ((boardSize+5)⌽(2 × (boardSize boardSize ↑ walker2)))
+board1 ← ⊂(boardSize boardSize ↑ walker1) + ((boardSize+3)⌽(2 × (boardSize boardSize ↑ walker2)))
 
 ∇ CountNeighbors { +/ +/ 1 0 ¯1 ⊖⌻ 1 0 ¯1 ⌽¨ ⍵}
 ∇ team CountTeamNeighbors board{CountNeighbors team = board}
@@ -42,6 +42,24 @@ surviveTeam2 ← (board = 2)∧((totalNeighbors = 3) ∨ totalNeighbors = 4)
 
 ∇ LifeIteration board {(BirthCells board) + SurviveCells board}
 
-(board1)(LifeIteration board1)(LifeIteration LifeIteration board1)(LifeIteration LifeIteration LifeIteration board1)(LifeIteration LifeIteration LifeIteration LifeIteration board1)
+∇ board RunIterations numIterations {
+i ← 0
+while(i < numIterations){
+i ← i + 1
+nextBoard ← (LifeIteration board)
+board1 ← board, nextBoard
+}
+}
+
+board1 RunIterations 4
+
+∇ DrawBoard board {gui:draw board}
+
+⍝DrawBoard ⊃board1
+
+while(1){
+    DrawBoard¨ board1}
+
+⍝(board1)(LifeIteration board1)(LifeIteration LifeIteration board1)(LifeIteration LifeIteration LifeIteration board1)(LifeIteration LifeIteration LifeIteration LifeIteration board1)
 
 ⍝(InvertBoard (5 5 ⍴ 0)) AssertEquals (5 5 ⍴ 1) 

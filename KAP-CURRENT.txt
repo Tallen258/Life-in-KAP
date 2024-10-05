@@ -4,25 +4,44 @@
 ∇AssertEquals{if (⍺≢⍵) {:failedAssertion throw ("Assertion Failed! expected: " (typeof ⍺) " '" (ToString ⍺) "' but was " (typeof ⍵) " '" (ToString ⍵) "'")}}
 
 boardSize ← 10
-walker ← (3 3 ⍴ ⍳ 9) ∊ 1 3 6 7 8 
-walker2 ← (3 3 ⍴ ⍳ 9) ∊ 1 3 6 7 8 
-Board1 ← ⊂boardSize boardSize ↑ (walker)
-Board2 ← ⊂boardSize boardSize ↑ 5 ⌽ 5 ⊖ (walker2)
+walker1 ← (3 3 ⍴ ⍳ 9) ∊ 2 3 5 7 8 
+walker2 ←  (3 3 ⍴ ⍳ 9) ∊ 0 3 5 6 7
+board1 ← ⊂(boardSize boardSize ↑ walker1) + ((boardSize+5)⌽(2 × (boardSize boardSize ↑ walker2)))
 
-∇ countNeighbors { +/ +/ 1 0 ¯1 ⊖⌻ 1 0 ¯1 ⌽¨ ⍵}
+∇ CountNeighbors { +/ +/ 1 0 ¯1 ⊖⌻ 1 0 ¯1 ⌽¨ ⍵}
+∇ team CountTeamNeighbors board{CountNeighbors team = board}
 
-∇ team countTeamNeighbors board{countNeighbors team = board} ⍝ alpha is team name, 
+∇ InvertBoard board {
+inverted ← (board = 0)×1 + (board ≠ 0) × 0
 
+inverted
+}
 
-⍝∇ Board {⍺ + ⍵}
-⍝(gui:draw) life (Board2 + Board1)
+∇ BirthCells board {
+team1Neighbors ← 1 CountTeamNeighbors board
+team2Neighbors ← 2 CountTeamNeighbors board
+totalNeighbors ← team1Neighbors + team2Neighbors
 
-∇ Survive {⍵ ∧ ∨/ 3 4 =¨ countNeighbors ⍵}
-∇ ToBeBorn {⊂(~⊃⍵) ∧ 3 = ⊃countNeighbors ⍵}
+born ← ⊂(InvertBoard ⊃board) ∧ ⊃(totalNeighbors = 3)
+teamBornAs ← ((team1Neighbors > team2Neighbors) × 1) + (team1Neighbors ≤ team2Neighbors) × 2
+newCells ← born × teamBornAs
 
-⍝3 = countNeighbors Board1
-∇ LifeIteration {(ToBeBorn ⍵) + Survive ⍵}
+newCells
+}
 
-LifeIteration Board1
+∇ SurviveCells board {
+team1Neighbors ← 1 CountTeamNeighbors board
+team2Neighbors ← 2 CountTeamNeighbors board
+totalNeighbors ← team1Neighbors + team2Neighbors
 
-1 countTeamNeighbors Board1 ⍝ less than or equal to 
+surviveTeam1 ← (board = 1)∧((totalNeighbors = 3) ∨ totalNeighbors = 4)
+surviveTeam2 ← (board = 2)∧((totalNeighbors = 3) ∨ totalNeighbors = 4)
+
+(surviveTeam1 × 1) + (surviveTeam2 × 2)
+}
+
+∇ LifeIteration board {(BirthCells board) + SurviveCells board}
+
+(board1)(LifeIteration board1)(LifeIteration LifeIteration board1)(LifeIteration LifeIteration LifeIteration board1)(LifeIteration LifeIteration LifeIteration LifeIteration board1)
+
+⍝(InvertBoard (5 5 ⍴ 0)) AssertEquals (5 5 ⍴ 1) 
