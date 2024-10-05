@@ -3,7 +3,7 @@
 ∇ToString{if ((typeof ⍵)=typeof "") {@[, (@, Join ToString¨ ⍵), @]} else { ⍕⍵}}
 ∇AssertEquals{if (⍺≢⍵) {:failedAssertion throw ("Assertion Failed! expected: " (typeof ⍺) " '" (ToString ⍺) "' but was " (typeof ⍵) " '" (ToString ⍵) "'")}}
 
-boardSize ← 20
+boardSize ← 10
 walker1 ← (3 3 ⍴ ⍳ 9) ∊ 2 3 5 7 8 
 walker2 ←  (3 3 ⍴ ⍳ 9) ∊ 0 3 5 6 7
 board1 ← ⊂(boardSize boardSize ↑ walker1) + ((boardSize+5)⌽(2 × (boardSize boardSize ↑ walker2)))
@@ -42,6 +42,6 @@ surviveTeam2 ← (board = 2)∧((totalNeighbors = 3) ∨ totalNeighbors = 4)
 
 ∇ LifeIteration board {(BirthCells board) + SurviveCells board}
 
-(board1)(LifeIteration board1)(LifeIteration LifeIteration board1)(LifeIteration LifeIteration LifeIteration board1)
+(board1)(LifeIteration board1)(LifeIteration LifeIteration board1)(LifeIteration LifeIteration LifeIteration board1)(LifeIteration LifeIteration LifeIteration LifeIteration board1)
 
 ⍝(InvertBoard (5 5 ⍴ 0)) AssertEquals (5 5 ⍴ 1) 
