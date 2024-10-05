@@ -23,7 +23,7 @@ team2Neighbors ← 2 CountTeamNeighbors board
 totalNeighbors ← team1Neighbors + team2Neighbors
 
 born ← ⊂(InvertBoard ⊃board) ∧ ⊃(totalNeighbors = 3)
-teamBornAs ← ((team1Neighbors > team2Neighbors) × 1) + (team1Neighbors ≤ team2Neighbors) × 1
+teamBornAs ← ((team1Neighbors > team2Neighbors) × 1) + (team1Neighbors ≤ team2Neighbors) × 2
 newCells ← born × teamBornAs
 
 newCells
