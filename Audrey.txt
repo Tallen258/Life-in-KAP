@@ -7,23 +7,26 @@ boardSize ← 10
 walker1 ← (3 3 ⍴ ⍳ 9) ∊ 2 3 5 7 8 
 walker2 ←  (3 3 ⍴ ⍳ 9) ∊ 0 3 5 6 7
 board1 ← ⊂(boardSize boardSize ↑ walker1) + ((boardSize+3)⌽(2 × (boardSize boardSize ↑ walker2)))
-⍝board1 ← ⊂boardSize boardSize ↑ (walker1)
 
-⍝ board2 ← ⊂boardSize boardSize ↑ 5 ⌽ 5 ⊖ (walker2)
 ∇ CountNeighbors { +/ +/ 1 0 ¯1 ⊖⌻ 1 0 ¯1 ⌽¨ ⍵}
 ∇ team CountTeamNeighbors board{CountNeighbors team = board}
 
-∇ Survive {⍵ ∧ ∨/ 3 4 =¨ CountNeighbors ⍵}
-∇ ToBeBorn {⊂(~⊃⍵) ∧ 3 = ⊃CountNeighbors ⍵}
+∇ InvertBoard board {
+inverted ← (board = 0)×1 + (board ≠ 0) × 0
+
+inverted
+}
 
 ∇ BirthCells board {
 team1Neighbors ← 1 CountTeamNeighbors board
 team2Neighbors ← 2 CountTeamNeighbors board
 totalNeighbors ← team1Neighbors + team2Neighbors
 
-born ← ⊂((~⊃board) ∧ ⊃(totalNeighbors = 3))
-teamBornAs ← 1 + (team1Neighbors > team2Neighbors)
-born × teamBornAs
+born ← ⊂(InvertBoard ⊃board) ∧ ⊃(totalNeighbors = 3)
+teamBornAs ← ((team1Neighbors > team2Neighbors) × 1) + (team1Neighbors ≤ team2Neighbors) × 2
+newCells ← born × teamBornAs
+
+newCells
 }
 
 ∇ SurviveCells board {
@@ -37,16 +40,8 @@ surviveTeam2 ← (board = 2)∧((totalNeighbors = 3) ∨ totalNeighbors = 4)
 (surviveTeam1 × 1) + (surviveTeam2 × 2)
 }
 
-⍝BirthCells board1 
-
-⍝3 = countNeighbors Board1
 ∇ LifeIteration board {(BirthCells board) + SurviveCells board}
 
+(board1)(LifeIteration board1)(LifeIteration LifeIteration board1)(LifeIteration LifeIteration LifeIteration board1)
 
-⍝SurviveCells board1
-⍝BirthCells board1
-
-⍝LifeIteration board1
-board1
-
-⍝1 CountTeamNeighbors board1 ⍝ less than or equal to 
+⍝(InvertBoard (5 5 ⍴ 0)) AssertEquals (5 5 ⍴ 1) 

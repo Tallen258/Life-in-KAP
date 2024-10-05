@@ -1,18 +1,51 @@
-KAP2.TXT
 
+∇Join{⍕¯1↓,⍉2 ¯1⍴⍵,(⍴⍵)⍴⍕⍺}
+∇ToString{if ((typeof ⍵)=typeof "") {@[, (@, Join ToString¨ ⍵), @]} else { ⍕⍵}}
+∇AssertEquals{if (⍺≢⍵) {:failedAssertion throw ("Assertion Failed! expected: " (typeof ⍺) " '" (ToString ⍺) "' but was " (typeof ⍵) " '" (ToString ⍵) "'")}}
 
 boardSize ← 10
-walker ← (10 10 ⍴ ⍳ 100) ∊ 8 18 28 29 10 
-Board ← (boardSize÷2) ⌽ (boardSize÷2) ⊖ boardSize boardSize ↑ (walker)
-∇ life {⊃1 ⍵ ∨∙∧ 3 4 = +/ +/ 1 0 ¯1 ⊖⌻ 1 0 ¯1 ⌽¨ ⊂⍵}
+walker1 ← (3 3 ⍴ ⍳ 9) ∊ 2 3 5 7 8 
+walker2 ←  (3 3 ⍴ ⍳ 9) ∊ 0 3 5 6 7
+board1 ← ⊂(boardSize boardSize ↑ walker1) + ((boardSize+3)⌽(2 × (boardSize boardSize ↑ walker2)))
+⍝board1 ← ⊂boardSize boardSize ↑ (walker1)
 
-Board ( (gui:draw) life Board)( life life Board)(life life life Board)
+⍝ board2 ← ⊂boardSize boardSize ↑ 5 ⌽ 5 ⊖ (walker2)
+∇ CountNeighbors { +/ +/ 1 0 ¯1 ⊖⌻ 1 0 ¯1 ⌽¨ ⍵}
+∇ team CountTeamNeighbors board{CountNeighbors team = board}
+
+∇ BirthCells board {
+team1Neighbors ← 1 CountTeamNeighbors board
+team2Neighbors ← 2 CountTeamNeighbors board
+totalNeighbors ← team1Neighbors + team2Neighbors
+
+born ← ⊂(~⊃board) ∧ ⊃(totalNeighbors = 3)
+teamBornAs ← 1 + (team1Neighbors > team2Neighbors)
+newCells ← born × teamBornAs
+
+newCells
+}
+
+∇ SurviveCells board {
+team1Neighbors ← 1 CountTeamNeighbors board
+team2Neighbors ← 2 CountTeamNeighbors board
+totalNeighbors ← team1Neighbors + team2Neighbors
+
+surviveTeam1 ← (board = 1)∧((totalNeighbors = 3) ∨ totalNeighbors = 4)
+surviveTeam2 ← (board = 2)∧((totalNeighbors = 3) ∨ totalNeighbors = 4)
+
+(surviveTeam1 × 1) + (surviveTeam2 × 2)
+}
+
+⍝BirthCells board1 
+
+⍝3 = countNeighbors Board1
+∇ LifeIteration board {(BirthCells board) + SurviveCells board}
 
 
+⍝SurviveCells board1
+BirthCells board1
 
+⍝LifeIteration board1
+board1
 
-
-
-TODO: 
-- TeamNeighborCount: function to count neighbors for a given team. Pass in the team number and the board
-- CountNeighbors: calculates the sum of two calls to the
+⍝1 CountTeamNeighbors board1 ⍝ less than or equal to 
