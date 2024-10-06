@@ -37,9 +37,9 @@ My Attempts
 
 --
 boardSize ← 20
-walker ← (10 10 ⍴ ⍳ 100) ∊ 8 18 28 29 20
-walker2 ← (10 10 ⍴ ⍳ 100) ∊ 3 13 23 22 11
-Board ← (boardSize÷2) ⌽ (boardSize÷2) ⊖ boardSize boardSize ↑ (walker, walker2)
+walker ← (10 10 ⍴ ⍳ 100) ∊ 8 18 28 29 20 3 13 23 22 11
+Board ← (boardSize÷2) ⌽ (boardSize÷2) ⊖ boardSize boardSize ↑ walker
 ∇ life {⊃1 ⍵ ∨∙∧ 3 4 = +/ +/ 1 0 ¯1 ⊖⌻ 1 0 ¯1 ⌽¨ ⊂⍵}
 
-Board ( (gui:draw) life Board)( life life Board)(  life life life Board)
+Board (  life Board)( life life Board)(  life life life Board)
+gui:draw
